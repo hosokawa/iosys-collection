@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "IOSYS Collection Helper",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Chrome extension for quick IOSYS search shortcuts.",
-  "permissions": ["contextMenus"],
+  "permissions": ["contextMenus", "scripting", "tabs"],
   "host_permissions": ["https://iosys.co.jp/*", "https://*.iosys.co.jp/*"],
   "background": {
     "service_worker": "background.js"
