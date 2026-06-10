@@ -58,17 +58,21 @@ function waitForTabComplete(tabId) {
   });
 }
 
-async function searchIosysFromMenu(title) {
+async function searchIosysFromMenu(title, tabId) {
   const searchKey = extractSearchKey(title);
+  if (!tabId) {
+    throw new Error("Could not find the source tab.");
+  }
+
   const tab = await new Promise((resolve, reject) => {
-    chrome.tabs.create({ url: IOSYS_HOME_URL, active: true }, (createdTab) => {
+    chrome.tabs.update(tabId, { url: IOSYS_HOME_URL, active: true }, (updatedTab) => {
       const error = chrome.runtime.lastError;
       if (error) {
         reject(new Error(error.message));
         return;
       }
 
-      resolve(createdTab);
+      resolve(updatedTab);
     });
   });
 
@@ -141,12 +145,12 @@ chrome.runtime.onStartup.addListener(() => {
   void rebuildContextMenu();
 });
 
-chrome.contextMenus.onClicked.addListener((info) => {
+chrome.contextMenus.onClicked.addListener((info, tab) => {
   switch (info.menuItemId) {
     case "pixel-8":
     case "pixel-9":
     case "pixel-10":
-      void searchIosysFromMenu(getMenuTitle(info.menuItemId));
+      void searchIosysFromMenu(getMenuTitle(info.menuItemId), tab?.id);
       break;
     default:
       break;
