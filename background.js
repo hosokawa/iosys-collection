@@ -3,8 +3,11 @@ const IOSYS_URL_PATTERNS = ["https://iosys.co.jp/*", "https://*.iosys.co.jp/*"];
 
 const MENU_ITEMS = [
   { id: "pixel-8", title: "Pixel 8(GZPFO)" },
+  { id: "pixel-8a", title: "Pixel 8a(G576D)" },
   { id: "pixel-9", title: "Pixel 9(G1B60)" },
+  { id: "pixel-9a", title: "Pixel 9a(G3Y12)" },
   { id: "pixel-10", title: "Pixel 10(GL066)" },
+  { id: "pixel-10a", title: "Pixel 10a(GV0BP)" },
 ];
 
 async function rebuildContextMenu() {
@@ -146,13 +149,7 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  switch (info.menuItemId) {
-    case "pixel-8":
-    case "pixel-9":
-    case "pixel-10":
-      void searchIosysFromMenu(getMenuTitle(info.menuItemId), tab?.id);
-      break;
-    default:
-      break;
+  if (MENU_ITEMS.some((item) => item.id === info.menuItemId)) {
+    void searchIosysFromMenu(getMenuTitle(info.menuItemId), tab?.id);
   }
 });
